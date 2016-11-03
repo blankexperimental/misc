@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
-# http://everet.org/python-byte-code.html
+# test python byte code
+# ref: http://everet.org/python-byte-code.html
 
 import dis
 
