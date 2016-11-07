@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+option cc_generic_services = true;
+option py_generic_services = true;
+
+message EchoRequest {
+  required int32 i = 1;
+}
+
+message EchoResponse {
+  required int32 error_code = 1;
+}
+
+service EchoService {
+  rpc Echo(EchoRequest) returns (EchoResponse);
+}

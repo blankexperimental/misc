@@ -8,7 +8,7 @@ import time
 import re
 
 SRC_ROOT_PATH = r"F:\misc.git\trunk"
-DST_ROOT_PATH = r"Z:\github\trunk"
+DST_ROOT_PATH = r"Z:\misc.git\trunk"
 
 SYNC_FILE_DATA_PATH = './sync_file_data.txt'
 ZH_PATTERN = re.compile(u'[\u4e00-\u9fa5]+')
