@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
 
+import asyncore
 import echo_service_pb2
-import t_server
+import t_acceptor
+import t_session
 
 class MyEchoService(echo_service_pb2.EchoService):
-
   def __init__(self):
     super(MyEchoService, self).__init__()
     self.service_stub = None
@@ -13,7 +14,11 @@ class MyEchoService(echo_service_pb2.EchoService):
     response = echo_service_pb2.EchoResponse
     response.pong = request.ping
     callback(response)
+    return
 
 
 if __name__ == "__main__":
-  pass
+  rpc_service = MyEchoService()
+  acceptor = t_acceptor.TAcceptor(rpc_service)
+  asyncore.loop()
+

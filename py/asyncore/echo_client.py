@@ -31,7 +31,7 @@ class EchoClient(asyncore.dispatcher):
     return bool(self.to_send)
 
   def readable(self):
-    print '[client][writable]'
+    print '[client][readable]'
     return True
 
   def handle_read(self):

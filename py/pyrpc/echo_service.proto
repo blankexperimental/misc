@@ -4,11 +4,11 @@ option cc_generic_services = true;
 option py_generic_services = true;
 
 message EchoRequest {
-  required string ping = 1;
+  required int ping = 1;
 }
 
 message EchoResponse {
-  required string pong = 1;
+  required int pong = 1;
 }
 
 service EchoService {
