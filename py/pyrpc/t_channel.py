@@ -6,13 +6,13 @@ import socket
 import t_setting
 import t_parser
 import t_guid_mgr
+import binascii
 
 class TRpcChannel(asyncore.dispatcher, google.protobuf.service.RpcChannel):
   def __init__(self):
     asyncore.dispatcher.__init__(self)
     google.protobuf.service.RpcChannel.__init__(self)
     self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
-    self.is_connected = False
     self.connect((t_setting.HOST, t_setting.PORT))
 
     self.send_msg_list = []
@@ -20,17 +20,17 @@ class TRpcChannel(asyncore.dispatcher, google.protobuf.service.RpcChannel):
 
   def handle_connect(self):
     print '[TRpcChannel][handle_connect]'
-    self.is_connected = True
+
 
   def SendMsg(self, msg):
-    print '[TRpcChannel][SendMsg]', msg
+    print '[TRpcChannel][SendMsg]', binascii.hexlify(msg)
     self.send_msg_list.append(msg)
     return
 
   def CallMethod(self, method_descriptor, rpc_controller,
                  request, response_class, done):
-    print '[TRpcChannel][SendMsg]', request, self.is_connected
-    if not self.is_connected:
+    print '[TRpcChannel][SendMsg]', request, self.connected
+    if not self.connected:
       done(None)
       return
 
@@ -50,17 +50,21 @@ class TRpcChannel(asyncore.dispatcher, google.protobuf.service.RpcChannel):
     self.is_connected = False
 
   def writable(self):
-    print '[TRpcChannel][writable]', len(self.send_msg_list)
+    print '[TRpcChannel][writable]', len(self.send_msg_list), self.connected
+    if not self.connected:
+      return True
     return len(self.send_msg_list)
 
   def readable(self):
-    print '[TRpcChannel][readable]'
+    print '[TRpcChannel][readable]', self.connected
     return True
 
   def handle_read(self):
     msg = self.recv(t_setting.BUFF_SIZE)
-    call_guid, method_idx, data = t_parser.UnpackResponse(msg)
+    print '[TRpcChannel][handle_read]', msg
+    call_guid, data = t_parser.UnpackResponse(msg)
     request, response_class, done = self.context_dict.pop(call_guid)
+    print '[TRpcChannel][handle_read]', request, response_class, done
     response = response_class()
     response.ParseFromString(data)
     done(response)

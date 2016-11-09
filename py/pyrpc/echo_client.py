@@ -10,14 +10,13 @@ import time
 # 如果出错，直接调用callback
 
 def Callback(response = None):
-  print response
+  print '[Callback]', response
   return
 
 if __name__ == "__main__":
   rpc_channel = t_channel.TRpcChannel()
   service_stub = echo_service_pb2.EchoService_Stub(rpc_channel)
-  print 'wait...'
-  asyncore.loop(1)
+  asyncore.loop(1, count=1)
 
   print 'start call...'
   request = echo_service_pb2.EchoRequest()
@@ -25,4 +24,5 @@ if __name__ == "__main__":
   rpc_controller = t_controller.TRpcController
   callback = Callback
   service_stub.Echo(rpc_controller, request, callback)
-  asyncore.loop()
+
+  asyncore.loop(1)

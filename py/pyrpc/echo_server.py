@@ -3,7 +3,6 @@
 import asyncore
 import echo_service_pb2
 import t_acceptor
-import t_session
 
 class MyEchoService(echo_service_pb2.EchoService):
   def __init__(self):
@@ -11,14 +10,14 @@ class MyEchoService(echo_service_pb2.EchoService):
     self.service_stub = None
 
   def Echo(self, rpc_controller, request, callback):
-    response = echo_service_pb2.EchoResponse
+    print "[MyEchoService][Echo]"
+    response = echo_service_pb2.EchoResponse()
     response.pong = request.ping
+    print 'response:', response
     callback(response)
     return
-
 
 if __name__ == "__main__":
   rpc_service = MyEchoService()
   acceptor = t_acceptor.TAcceptor(rpc_service)
   asyncore.loop()
-
