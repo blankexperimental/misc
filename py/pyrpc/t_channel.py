@@ -44,15 +44,19 @@ class TRpcChannel(asyncore.dispatcher, google.protobuf.service.RpcChannel):
     return
 
   def handle_close(self):
-    self.is_connected = False
+    print 'handle_close'
+    self.close()
 
   def handle_expt(self):
-    self.is_connected = False
+    print 'handle_error'
 
   def writable(self):
     print '[TRpcChannel][writable]', len(self.send_msg_list), self.connected
+
+    # 不加这一句会导致无法handle_connect
     if not self.connected:
       return True
+
     return len(self.send_msg_list)
 
   def readable(self):
