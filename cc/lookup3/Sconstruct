@@ -1,0 +1,20 @@
+import os
+
+env = DefaultEnvironment()
+
+# env.Append(CPPPATH=['/usr/include/python2.7/'])
+env.Append(CPPPATH=['C:\\Python27\\include'])
+env.Append(CCFLAGS = ' -Wall -O2 -std=c++11 ')
+
+env.Append(LIBPATH = ['C:\\Python27\\libs',])
+env.Append(LIBS = ['Python27.lib',])
+
+env.SharedLibrary('lookup3',
+                  [ 'lookup3.c', 'py_lookup3.c',],
+                  SHLIBPREFIX='')
+
+"""
+C:\Python27\libs\Python27.lib : warning LNK4272: library machine type 'X86' conf
+licts with target machine type 'x64'
+lookup3.dll : fatal error LNK1120: 3 unresolved externals
+"""
