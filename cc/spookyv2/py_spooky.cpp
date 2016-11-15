@@ -70,8 +70,7 @@ spooky_hash128(PyObject *self, PyObject *args, PyObject *kwargs)
 }
 
 static PyObject *
-spooky_hash64(PyObject *self, PyObject *args, PyObject *kwargs)
-{
+spooky_hash64(PyObject *self, PyObject *args, PyObject *kwargs) {
     const char *message;
     int message_length;
     uint64 seed[2] = {0};
@@ -93,8 +92,7 @@ spooky_hash64(PyObject *self, PyObject *args, PyObject *kwargs)
 }
 
 static PyObject *
-spooky_hash32(PyObject *self, PyObject *args, PyObject *kwargs)
-{
+spooky_hash32(PyObject *self, PyObject *args, PyObject *kwargs) {
     const char *message;
     int message_length;
     uint64 seed[2] = {0};
@@ -116,18 +114,14 @@ spooky_hash32(PyObject *self, PyObject *args, PyObject *kwargs)
 }
 
 static PyMethodDef SpookyMethods[] = {
-    {"hash128_bytes", (PyCFunction)spooky_hash128_bytes,
-      METH_VARARGS | METH_KEYWORDS,
-        "Generate a 128bit hash as bytes"},
-    {"hash128", (PyCFunction)spooky_hash128,
-      METH_VARARGS | METH_KEYWORDS,
-        "Generate a 128bit int hash."},
-    {"hash64", (PyCFunction)spooky_hash64,
-      METH_VARARGS | METH_KEYWORDS,
-        "Generate a 64bit int hash."},
-    {"hash32", (PyCFunction)spooky_hash32,
-      METH_VARARGS | METH_KEYWORDS,
-        "Generate a 32bit int hash."},
+    {"hash128_bytes", (PyCFunction)spooky_hash128_bytes, METH_VARARGS | METH_KEYWORDS,
+                      "Generate a 128bit hash as bytes"},
+    {"hash128", (PyCFunction)spooky_hash128, METH_VARARGS | METH_KEYWORDS,
+                      "Generate a 128bit int hash."},
+    {"hash64", (PyCFunction)spooky_hash64, METH_VARARGS | METH_KEYWORDS,
+                      "Generate a 64bit int hash."},
+    {"hash32", (PyCFunction)spooky_hash32, METH_VARARGS | METH_KEYWORDS,
+                      "Generate a 32bit int hash."},
     {NULL, NULL, 0, NULL}
 };
 
