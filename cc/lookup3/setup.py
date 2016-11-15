@@ -7,7 +7,8 @@ module = Extension('lookup3',
                                      ('MINOR_VERSION', '1')],
                     include_dirs = ['.'],
                     library_dirs = ['.'],
-                    extra_compile_args=["-std=c++11", "-O2"],
+                    # extra_compile_args=["-std=c++11", "-O2"],
+                    extra_compile_args=[ "-O2"],
                     language="c++",
                     sources = ['./lookup3.c', './py_lookup3.c'])
 
