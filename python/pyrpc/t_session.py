@@ -5,6 +5,7 @@ import t_parser
 import t_setting
 import t_controller
 import binascii
+import t_buffer_mgr
 
 class TSession(asyncore.dispatcher):
   def __init__(self, rpc_service, sock, address, acceptor):
@@ -15,7 +16,7 @@ class TSession(asyncore.dispatcher):
     self.recv_msg_list = []
     self.rpc_controller = t_controller.TRpcController()
     self.acceptor = acceptor
-
+    self.buffer_mgr = t_buffer_mgr.TBufferMgr()
   def SendData(self, data):
     self.send_msg_list.append(data)
     print "[SendData]send_msg_list ", self.send_msg_list
@@ -48,6 +49,12 @@ class TSession(asyncore.dispatcher):
   # TODO: 用method_idx没有method_name做cmd_key兼容性好, method_idx->method_key
   def handle_read(self):
     msg = self.recv(t_setting.BUFF_SIZE)
+    self.buffer_mgr.Append(msg)
+    while self.buffer_mgr.HasPacket():
+      packet = self.buffer_mgr.GetPacket()
+      self.DealRequest(packet)
+
+  def DealRequest(self, msg):
     print '[TSession][handle_read]1 ', binascii.hexlify(msg)
     call_guid, method_idx, data = t_parser.UnpackRequest(msg)
     print '[TSession][handle_read]2 ', call_guid, method_idx, data, self.rpc_service, self.rpc_service.GetDescriptor(), self.rpc_service.GetDescriptor().methods

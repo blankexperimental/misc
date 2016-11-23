@@ -7,6 +7,7 @@ import t_setting
 import t_parser
 import t_guid_mgr
 import binascii
+import t_buffer_mgr
 
 class TRpcChannel(asyncore.dispatcher, google.protobuf.service.RpcChannel):
   def __init__(self):
@@ -17,6 +18,8 @@ class TRpcChannel(asyncore.dispatcher, google.protobuf.service.RpcChannel):
 
     self.send_msg_list = []
     self.context_dict = {}
+
+    self.buffer_mgr = t_buffer_mgr.TBufferMgr()
 
   def handle_connect(self):
     print '[TRpcChannel][handle_connect]'
@@ -65,6 +68,12 @@ class TRpcChannel(asyncore.dispatcher, google.protobuf.service.RpcChannel):
 
   def handle_read(self):
     msg = self.recv(t_setting.BUFF_SIZE)
+    self.buffer_mgr.Append(msg)
+    while self.buffer_mgr.HasPacket():
+      packet = self.buffer_mgr.GetPacket()
+      self.DealResponse(packet)
+
+  def DealResponse(self, msg):
     print '[TRpcChannel][handle_read]', msg
     call_guid, data = t_parser.UnpackResponse(msg)
     request, response_class, done = self.context_dict.pop(call_guid)
